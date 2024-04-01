@@ -1,0 +1,31 @@
+h3#menu{
+    color:white;
+    /*border-right:2px solid white;*/
+    padding-right:5px;
+}
+h1{
+    border-bottom:1px solid black;
+    border-top:1px solid black;
+    padding-bottom:5px;
+    text-align:center;
+}
+.central{
+    border:2px solid black;
+    border-top:none;
+  
+    background-color:white;
+
+}
+
+.row{
+    padding-bottom: 1em;
+}
+.botoesADD{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+.colunaTabela{
+    width: 14%;
+    
+}
