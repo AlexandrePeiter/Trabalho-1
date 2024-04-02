@@ -3,7 +3,11 @@ const mask = () =>{
     $('#cep').mask('00000-000');
     $('#telefone').mask('00000-0000');
 }
-mask();
+
+window.onload = function() {
+    mask();
+};
+
 
 const addTelefone = document.querySelector("#addTelefone");
 const tagForm = document.querySelector(".form");
@@ -56,6 +60,9 @@ addAluno.addEventListener("click", function(e){
     const CEP = document.querySelector("#cep").value;
     vetAlunos.push(criaAluno(nome, data, CPF, CEP, vetTelefones, vetEmails));
     apresentaAlunos();
+
+    const informacao = document.querySelector(".informacao");
+    informacao.style.display = 'block';
 });
 
 
@@ -119,3 +126,17 @@ function apresentaAlunos(){
         table.appendChild(linha);
     }
 }
+
+document.addEventListener('keydown', function(event) {
+    // Verifica se a tecla pressionada é 'S' e se a tecla 'Ctrl' (ou 'Command') também está pressionada
+    if ((event.ctrlKey || event.metaKey) && event.key === 's') {
+      event.preventDefault(); // Evita o comportamento padrão do navegador (salvar a página)
+      let titulo = "Alunos Cadastrados";
+      
+      let conteudo_arquivo = JSON.stringify(vetAlunos,null, 2);  
+      
+	  let blob = new Blob([conteudo_arquivo], { type: "text/plain;charset=utf-8" });
+	  saveAs(blob, titulo + ".json");
+    }
+});
+
