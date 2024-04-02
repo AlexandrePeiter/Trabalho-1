@@ -40,14 +40,14 @@ addEmail.addEventListener("click", function(e){
     telefones.appendChild(option);
 });
 
-function criaAluno(nome, data, CPF, CEP, telefones, emails){
+const criarAlunoSimples = function criaAluno(nome, data, CPF, CEP, telefones, emails){
     let aluno = {
         nome: nome,
          data: data,
         CPF: CPF,
         CEP: CEP,
         telefones: telefones,
-         emails: emails
+        emails: emails
     }
     return aluno;
 }
@@ -58,11 +58,18 @@ addAluno.addEventListener("click", function(e){
     const data = document.querySelector("#dataCargo").value;
     const CPF = document.querySelector("#CPF").value;
     const CEP = document.querySelector("#cep").value;
-    vetAlunos.push(criaAluno(nome, data, CPF, CEP, vetTelefones, vetEmails));
+    vetAlunos.push(criarAlunoSimples(nome, data, CPF, CEP, vetTelefones, vetEmails));
     apresentaAlunos();
 
     const informacao = document.querySelector(".informacao");
     informacao.style.display = 'block';
+
+
+    const meuModal = new bootstrap.Modal(document.getElementById('exampleModal'));
+    const meuModalErro = new bootstrap.Modal(document.getElementById('exampleModalErro'));
+    meuModalErro.show();
+    meuModal.show();
+
 });
 
 
