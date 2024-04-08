@@ -3,9 +3,9 @@ h3#menu{
     /*border-right:2px solid white;*/
     padding-right:5px;
 }
-h1{
+.titulo{
     border-bottom:1px solid black;
-    border-top:1px solid black;
+    
     padding-bottom:5px;
     padding-top:1.5em;
     text-align:center;
@@ -22,10 +22,19 @@ h1{
     padding-bottom: 1rem;
 }
 .botoesADD{
-    display: flex;
-    justify-content: center;
+    display: inline-block;
     width: 100%;
 }
+.final{
+    padding-top: 1rem;
+    display: flex;
+    justify-items: center;
+    justify-content: center;
+}
+.btnCad{
+    width: 95%;
+} 
+
 .colunaTabela{
     width: 14%;
     
@@ -37,4 +46,7 @@ h1{
 .barraSuperior{
     position: fixed;
    width: 100%;
+}
+.linhasTabela{
+    vertical-align: middle;
 }

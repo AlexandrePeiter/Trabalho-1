@@ -1,10 +1,10 @@
-const mask = () =>{
+const mask = () => {
     $('#CPF').mask('000.000.000-00');
     $('#cep').mask('00000-000');
     $('#telefone').mask('00000-0000');
 }
 
-window.onload = function() {
+window.onload = function () {
     mask();
 };
 
@@ -17,33 +17,33 @@ let vetEmails = [];
 let vetAlunos = [];
 
 
-addTelefone.addEventListener("click", function(e){
+addTelefone.addEventListener("click", function (e) {
     e.preventDefault();
     const telefones = document.querySelector("#telefones");
     const option = document.createElement("option");
     const ddd = document.querySelector("#ddd").value;
     const telefone = document.querySelector("#telefone").value;
     option.innerText = `(${ddd}) ${telefone}`;
-    option.selected = true; 
+    option.selected = true;
     vetTelefones.push(`(${ddd}) ${telefone}`);
     telefones.appendChild(option);
 });
 
-addEmail.addEventListener("click", function(e){
+addEmail.addEventListener("click", function (e) {
     e.preventDefault();
     const telefones = document.querySelector("#emails");
     const option = document.createElement("option");
     const email = document.querySelector("#email").value;
     option.innerText = email;
-    option.selected = true; 
+    option.selected = true;
     vetEmails.push(email);
     telefones.appendChild(option);
 });
 
-const criarAlunoSimples = function criaAluno(nome, data, CPF, CEP, telefones, emails){
+const criarAlunoSimples = function criaAluno(nome, data, CPF, CEP, telefones, emails) {
     let aluno = {
         nome: nome,
-         data: data,
+        data: data,
         CPF: CPF,
         CEP: CEP,
         telefones: telefones,
@@ -52,38 +52,55 @@ const criarAlunoSimples = function criaAluno(nome, data, CPF, CEP, telefones, em
     return aluno;
 }
 
-addAluno.addEventListener("click", function(e){
+addAluno.addEventListener("click", function (e) {
     e.preventDefault();
     const nome = document.querySelector("#nome").value;
     const data = document.querySelector("#dataCargo").value;
     const CPF = document.querySelector("#CPF").value;
     const CEP = document.querySelector("#cep").value;
+    if(nome && data && CPF && CEP){
     vetAlunos.push(criarAlunoSimples(nome, data, CPF, CEP, vetTelefones, vetEmails));
     apresentaAlunos();
 
     const informacao = document.querySelector(".informacao");
     informacao.style.display = 'block';
-
+    apagarCampos();
 
     const meuModal = new bootstrap.Modal(document.getElementById('exampleModal'));
-    const meuModalErro = new bootstrap.Modal(document.getElementById('exampleModalErro'));
-    meuModalErro.show();
     meuModal.show();
+    }
+    else{
+        const meuModalErro = new bootstrap.Modal(document.getElementById('exampleModalErro'));
+        meuModalErro.show();
+    }
+    
+   
 
 });
 
+function apagarCampos(){
+    document.querySelector("#nome").value = "";
+    const data = document.querySelector("#dataCargo").value = "";
+    const CPF = document.querySelector("#CPF").value = "";
+    const CEP = document.querySelector("#cep").value = "";
+    const telefones = document.querySelector("#telefones").innerHTML = "";
+    const emails = document.querySelector("#emails").innerHTML = "";
+    let vetTelefones = [];
+    let vetEmails = [];
+}
 
-function apresentaAlunos(){
+function apresentaAlunos() {
     const table = document.querySelector("#table");
     table.innerHTML = "";
-    for(n of vetAlunos){
-        
+    for (n of vetAlunos) {
+
         const linha = document.createElement("tr");
+        linha.className = "linhasTabela";
 
         const nome = document.createElement('td');
         nome.textContent = n.nome;
         linha.appendChild(nome);
-        
+
         const data = document.createElement('td');
         data.textContent = n.data;
         linha.appendChild(data);
@@ -99,7 +116,7 @@ function apresentaAlunos(){
         const telefones = document.createElement('td');
         const telSelecet = document.createElement('select');
         telSelecet.className = 'form-control';
-        for(i of n.telefones){
+        for (i of n.telefones) {
             const tel = document.createElement('option');
             tel.innerText = i;
             telSelecet.appendChild(tel);
@@ -110,7 +127,7 @@ function apresentaAlunos(){
         const emails = document.createElement('td');
         const emailSelecet = document.createElement('select');
         emailSelecet.className = 'form-control';
-        for(i of n.emails){
+        for (i of n.emails) {
             const email = document.createElement('option');
             email.innerText = i;
             emailSelecet.appendChild(email);
@@ -118,32 +135,47 @@ function apresentaAlunos(){
         emails.appendChild(emailSelecet);
         linha.appendChild(emails);
 
-        const botaoExcluir = document.createElement('button');
-  botaoExcluir.textContent = 'Excluir';
-  botaoExcluir.onclick = function(event) {
-    // Remove a linha ao clicar no botão
-    console.log(event);
-    table.deleteRow(vetAlunos.indexOf(n));
-    vetAlunos.splice(vetAlunos.indexOf(n), 1);
-  };
-  const botaoa = document.createElement('td');
-  botaoa.appendChild(botaoExcluir);
 
-  linha.appendChild(botaoa);
+        /*const botaoa = document.createElement('td');
+        botaoa.innerHTML = "<button onclick='excluirLinha(this)'>Excluir</button>"*/
+        
+        const botaoa = document.createElement('td');
+        const but = document.createElement('td');
+        but.addEventListener("click", function(){
+            excluirLinha(this);
+        });
+        but.textContent = "Excluir";
+        but.className = "botoesADD btn btn-secondary"
+        
+        botaoa.appendChild(but);
+
+        linha.appendChild(botaoa);
+
+
         table.appendChild(linha);
     }
 }
+function excluirLinha(button) {
+    var row = button.parentNode.parentNode;
+    var index = row.rowIndex - 1; 
+    row.parentNode.removeChild(row);
 
-document.addEventListener('keydown', function(event) {
+    vetAlunos.splice(index, 1);
+
+    if(vetAlunos.length == 0){
+        informacao.style.display = 'none';
+    }
+}
+document.addEventListener('keydown', function (event) {
     // Verifica se a tecla pressionada é 'S' e se a tecla 'Ctrl' (ou 'Command') também está pressionada
     if ((event.ctrlKey || event.metaKey) && event.key === 's') {
-      event.preventDefault(); // Evita o comportamento padrão do navegador (salvar a página)
-      let titulo = "Alunos Cadastrados";
-      
-      let conteudo_arquivo = JSON.stringify(vetAlunos,null, 2);  
-      
-	  let blob = new Blob([conteudo_arquivo], { type: "text/plain;charset=utf-8" });
-	  saveAs(blob, titulo + ".json");
+        event.preventDefault(); // Evita o comportamento padrão do navegador (salvar a página)
+        let titulo = "Alunos Cadastrados";
+
+        let conteudo_arquivo = JSON.stringify(vetAlunos, null, 2);
+
+        let blob = new Blob([conteudo_arquivo], { type: "text/plain;charset=utf-8" });
+        saveAs(blob, titulo + ".json");
     }
 });
 
